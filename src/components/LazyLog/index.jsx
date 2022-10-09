@@ -182,6 +182,11 @@ export default class LazyLog extends Component {
      * Flag to enable/disable case insensitive search
      */
     caseInsensitive: bool,
+    /**
+     * Whether to show the loading component and periodically
+     * try to refetch the logendpoint on a retriable error
+     */
+    reloadOnError: bool,
   };
 
   static defaultProps = {
@@ -213,6 +218,7 @@ export default class LazyLog extends Component {
     lineClassName: '',
     highlightLineClassName: '',
     caseInsensitive: false,
+    reloadOnError: true,
   };
 
   static getDerivedStateFromProps(
@@ -664,7 +670,7 @@ export default class LazyLog extends Component {
     const { error, count, loaded } = this.state;
 
     if (error) {
-      return this.renderError();
+      return <Loading />;
     }
 
     // Handle case where log is empty
