@@ -187,6 +187,10 @@ export default class LazyLog extends Component {
      * try to refetch the logendpoint on a retriable error
      */
     reloadOnError: bool,
+    /**
+     * Poll period if reloadOnError is true
+     */
+    reloadPollPeriod: number,
   };
 
   static defaultProps = {
@@ -364,6 +368,14 @@ export default class LazyLog extends Component {
       this.emitter.off('error', this.handleError);
       this.emitter = null;
     }
+
+    this.setState({
+      error: null,
+      lines: List(),
+      loaded: false,
+      count: 0,
+      offset: 0,
+    });
   }
 
   handleUpdate = ({ lines: moreLines, encodedLog }) => {
@@ -666,10 +678,18 @@ export default class LazyLog extends Component {
       loadingComponent: Loading,
       lineClassName,
       highlightLineClassName,
+      reloadOnError,
+      reloadPollPeriod,
     } = this.props;
     const { error, count, loaded } = this.state;
 
     if (error) {
+      if (reloadOnError) {
+        setTimeout(() => {
+          this.request();
+        }, reloadPollPeriod);
+      }
+
       return <Loading />;
     }
 
