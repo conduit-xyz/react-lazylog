@@ -223,6 +223,7 @@ export default class LazyLog extends Component {
     highlightLineClassName: '',
     caseInsensitive: false,
     reloadOnError: true,
+    onScroll: null,
   };
 
   static getDerivedStateFromProps(
@@ -277,6 +278,10 @@ export default class LazyLog extends Component {
 
   componentDidMount() {
     this.request();
+
+    if (this.onScroll) {
+      window.addEventListener('scroll', this.onScroll);
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -313,6 +318,10 @@ export default class LazyLog extends Component {
 
   componentWillUnmount() {
     this.endRequest();
+
+    if (this.onScroll) {
+      window.removeEventListener('scroll', this.onScroll);
+    }
   }
 
   initEmitter() {
