@@ -191,6 +191,8 @@ export default class LazyLog extends Component {
      * Poll period if reloadOnError is true
      */
     reloadPollPeriod: number,
+
+    onScroll: func,
   };
 
   static defaultProps = {
@@ -279,8 +281,8 @@ export default class LazyLog extends Component {
   componentDidMount() {
     this.request();
 
-    if (this.onScroll) {
-      window.addEventListener('scroll', this.onScroll);
+    if (this.props.onScroll) {
+      window.addEventListener('scroll', this.props.onScroll);
     }
   }
 
@@ -319,8 +321,8 @@ export default class LazyLog extends Component {
   componentWillUnmount() {
     this.endRequest();
 
-    if (this.onScroll) {
-      window.removeEventListener('scroll', this.onScroll);
+    if (this.props.onScroll) {
+      window.removeEventListener('scroll', this.props.onScroll);
     }
   }
 

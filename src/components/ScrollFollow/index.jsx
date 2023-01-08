@@ -52,7 +52,7 @@ export default class ScrollFollow extends Component {
   };
 
   handleScroll = ({ scrollTop, scrollHeight, clientHeight }) => {
-    if (this.state.follow && scrollHeight - scrollTop !== clientHeight) {
+    if (this.state.follow && scrollHeight - scrollTop > clientHeight + 20) {
       this.setState({ follow: false });
 
       return false;
